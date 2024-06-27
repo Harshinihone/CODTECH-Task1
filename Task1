@@ -1,0 +1,138 @@
+from google.colab import drive
+drive.mount('/content/drive')
+
+#IMPORTING LIBRARIES
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#IMPORTING DATASET
+import io
+#toyotadf1=pd.read_csv(io.BytesIO(uploaded['Toyota (1).csv']),index_col=0)
+toyotadf1=pd.read_csv("/content/drive/MyDrive/all datasets/Toyota (1).csv",index_col=0)
+
+#Copy the DATASET in toyotadf
+toyotadf=toyotadf1.copy()
+
+#FINDING DATA TYPES OF EACH COLUMN TO FIND MISSING DATA OR NULL VALUES
+toyotadf.info()
+
+#TO PRINT FIRST AND LAST FIVE ROWS OF THE DATASET
+toyotadf.head()
+toyotadf.tail()
+
+#GIVES NUMBER OF NULL VALUES IN EACH COLUMN
+toyotadf.isnull().sum()
+
+#Check unique elements, missing values &  dtype of all attribute
+import numpy as np
+np.unique(toyotadf['HP'])
+
+toyotadf['HP'].unique()
+toyotadf['HP'].unique()
+np.unique(toyotadf['Doors'])
+# check for the unique values for Categorial attributes and replace with their numerical Values
+toyotadf['Doors'].unique()
+
+toyotadf['Doors'].replace('three',3,inplace=True)
+toyotadf['Doors'].replace('four',4,inplace=True)
+toyotadf['Doors'].replace('five',5,inplace=True)
+toyotadf
+
+toyotadf.info()
+
+toyotadf.isnull().sum()
+
+toyotadf.isnull().sum().sum()
+
+toyotadf.describe()
+
+toyotadf['Age'].tail(5)
+
+# Fill Age Numerical Attributes with MEAN ,MEDIAN
+toyotadf['Age'].mean()
+toyotadf['Age'].fillna(toyotadf['Age'].mean(), inplace=True)
+#toyotadf['KM'].median()
+#toyotadf['KM'].fillna(toyotadf['KM'].median(), inplace=True)
+#toyotadf['HP'].fillna(toyotadf['HP'].mean(), inplace=True)
+toyotadf['KM'].head(10)
+toyotadf['FuelType'].value_counts()
+toyotadf['Age'].fillna(toyotadf['Age'].mean(), inplace=True)
+#toyotadf['KM'].fillna(toyotadf['KM'].median(), inplace=True)
+# # Fill Categories Attributes with MODE with second mode by index 1
+toyotadf['FuelType'].value_counts()
+toyotadf['FuelType'].mode()
+toyotadf['FuelType'].fillna(toyotadf['FuelType'].value_counts().index[1], inplace=True)
+# # Fill Categories Attributes with MODE with First mode by index 0
+toyotadf['MetColor'].value_counts()
+toyotadf['MetColor'].mode()
+toyotadf['MetColor'].fillna(toyotadf['MetColor'].mode().index[0], inplace=True)
+
+Outlier detection and removal
+q1, q3 = np.percentile(d, [25, 75])
+print(q1)
+print(q3)
+iqr = q3-q1
+print(iqr)
+
+lower_bound = q1 - (iqr*1.5)
+upper_bound = q3 + (iqr*1.5)
+print(lower_bound)
+print(upper_bound)
+
+Encode categorical features as a one-hot numeric array
+#ENCODING CATEGORICAL DATA using Get_Dummies
+onehot_stoyota = pd.get_dummies(toyotadf, columns = ['FuelType'])
+print(onehot_stoyota)
+
+#onehot_stoyota=pd.get_dummies(toyotadf)
+#onehot_stoyota.shape
+onehot_stoyota.columns
+onehot_stoyota.iloc[0:4,9:]
+onehot_stoyota.dtypes
+onehot_stoyota.head(10)
+
+a1 = toyotadf['Age']
+b1 = toyotadf['Price']
+plt.scatter(a1,b1, color = 'm')
+plt.xlabel('Age')
+plt.ylabel('Price')
+
+a2 = onehot_stoyota['HP']
+b2 = onehot_stoyota['Price']
+plt.scatter(a2,b2, color = 'm')
+plt.xlabel('HP')
+plt.ylabel('Price')
+
+def detect_outliers_z_score(d, threshold):
+    outliers = []
+    mean = np.mean(d)
+    std = np.std(d)
+    for x in d:
+        z_score = np.abs((x - mean)/std)
+        if np.ceil(z_score)>threshold:
+            outliers.append(x)
+    return outliers
+
+d = [11, 12, 24, 11, 14, 12, 15, 11, 12, 13, 12, 13, 14, 102, 12, 11, 13, 14, 107, 15, 11, 12, 14, 108, 11, 14, 16, 60, 140]
+len(d)
+
+d = [11, 12, 24, 11, 14, 12, 15, 11, 12, 13, 12, 13, 14, 102, 12, 11, 13, 14, 107, 15, 11, 12, 14, 108, 11, 14, 16, 60, 140]
+len(d)
+
+plt.figure(figsize=(16, 40))
+plt.subplot(8, 2, 1)
+sns.boxplot(toyotadf1.Age)
+plt.subplot(8, 2, 2)
+sns.distplot(toyotadf1.Age)
+plt.subplot(8, 2, 3)
+sns.boxplot(toyotadf1.KM)
+
+plt.figure(figsize=(16, 5))
+sns.boxplot(df['KM'])
+plt.show()
+
+df.drop(['Unnamed: 0'], axis=1, inplace=True)
+df.corr()
+corr_matrix = df.corr()
+sns.heatmap(corr_matrix, annot=True)
